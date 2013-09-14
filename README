@@ -1,0 +1,85 @@
+Lynx - A Dynamic Instrumentation System for Data-Parallel Applications on
+       GPGPU Architectures          
+
+Author: Naila Farooqui (naila@cc.gatech.edu)
+
+GPU Lynx Website: http://code.google.com/p/gpulynx/
+
+For more detailed documentation, please see: 
+    http://code.google.com/p/gpulynx/w/list
+
+For related publication, please see: 
+    www.cc.gatech.edu/~naila/lynx.pdf
+
+Overview
+--------
+As parallel execution platforms continue to proliferate, there is a growing need 
+for real-time introspection tools to provide insight into platform behavior for 
+performance debugging, correctness checks, and to drive effective resource 
+management schemes. To address this need, we present the Lynx dynamic 
+instrumentation system. Lynx provides the capability to write instrumentation 
+routines that are (1) selective, instrumenting only what is needed, (2) transparent, 
+without changes to the applications’ source code, (3) customizable, and (4) efficient.
+
+Lynx was originally implemented as a branch of GPU Ocelot, a framework that provides 
+run-time code generation of CUDA programs for heterogeneous architectures. Lynx now 
+exists as a stand-alone, PTX editing tool, encapsulating only the necessary Ocelot 
+dependencies (namely, Ocelot's PTX Parser, PTX IR and CFG/DFG Analyses components). 
+
+Lynx can be built as a library (liblynx.so), where it can be linked with any runtime,
+or as a Lynx runtime (liblynx_runtime.so), where it provides a default implementation 
+of the CUDA runtime to directly support the execution of CUDA applications on NVIDIA
+GPU devices.
+ 
+ * GPU Ocelot: http://code.google.com/p/gpuocelot/
+
+Building Lynx
+-------------
+
+Lynx depends on CUDA 4.0+, boost, flex, bison, scons and python (for building). 
+So far, Lynx has only been developed and tested on Ubuntu 11.10. You can install 
+the necessary packages on Ubuntu:
+
+sudo apt-get install libboost-all-dev
+sudo apt-get install flex bison scons python
+
+Please be sure to install the CUDA toolkit (4.0 or higher) from NVIDIA's website.
+Lynx currently supports PTX ISA 3.0 and requires a CUDA-capable (Fermi) GPU.
+
+To build Lynx, use the following command:
+
+scons -j<number-of-jobs>
+
+To install Lynx (install dir: /usr/local/lib):
+
+sudo scons install -j<number-of-jobs>
+
+The build script will obtain all of the relevant Ocelot/Hydrazine dependencies 
+before building Lynx.
+
+Running CUDA apps with Lynx
+---------------------------
+
+Please note that to run Lynx with the currently available instrumentations, 
+the 'configure.lynx' file and the "resources" directory need to be located in
+the execution directory (i.e., the directory from where the CUDA application is
+executed from).
+
+Lynx currently provides the following instrumentations:
+
+Activity Factor (activityFactor)
+Branch Divergence (branchDivergence)
+Clock Cycle Count (clockCycleCount)
+Memory Efficiency (memoryEfficiency)
+
+A sample 'configure.lynx' file is included. The associated instrumentation name
+to be specified in the 'configure.lynx' file for each of the above instrumentations 
+is specified in parantheses.
+
+To run a CUDA application (for example, BlackScholes) with Lynx:
+
+    LD_PRELOAD="$(PATH_TO_LYNX)/liblynx.so" ./BlackScholes
+
+The default location for liblynx.so and liblynx_runtime.so is 
+<lynx-dir>/.release_build/
+
