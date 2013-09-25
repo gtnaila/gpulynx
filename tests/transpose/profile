@@ -1,0 +1,1 @@
+{ "dataMove":0, "appExecute":0, "kernelsExecute":3.14713e-05, "runtime":0, "dataMoveSize":0, "branches":0, "divergentBranches":0, "globalMemTransactions":131072, "dynamicHalfWarpsExecutingMemTransactions":131072, "barriers":0, "instructionCount":0, "activeThreads":0, "maxThreads":0, "warps":0}

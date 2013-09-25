@@ -33,7 +33,7 @@ intermediate_headers = []
 directories = [ 'lynx/analysis/implementation',
                 'lynx/api/implementation',
                 'lynx/cuda/implementation',
-                'lynx/management/implementation',  
+                'lynx/instrumentation/implementation',
                 'lynx/transforms/implementation',
                 'lynx/translator/implementation', 
                 'lynx/trace/implementation',

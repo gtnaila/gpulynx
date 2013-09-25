@@ -161,27 +161,27 @@ namespace cuda {
         boost::unique_lock<boost::mutex> lock(_mutex);
             
         handle = _fatBinaries.size();
+	
+	    FatBinaryMap::const_iterator fatbin = _fatBinaries.insert(std::make_pair(
+		    handle,	FatBinaryContext(fatCubin))).first;
+	
+	    for (FatBinaryMap::const_iterator it = _fatBinaries.begin();
+		    it != _fatBinaries.end(); ++it) {
+		    if(fatbin == it) continue;
+		
+		    if (std::string(it->second.name()) == fatbin->second.name()) {
+			    assert(0 && "binary already exists");		
+			    return 0;
+		    }	
+	    }
 
-        FatBinaryContext cubinContext(fatCubin);
-
-        for (FatBinaryVector::const_iterator it = _fatBinaries.begin();
-	        it != _fatBinaries.end(); ++it) {
-	        if (std::string(it->name()) == cubinContext.name()) {
-		        assert(0 && "binary already exists");		
-		        return 0;
-	        }	
-        }
-
-        _fatBinaries.push_back(cubinContext);
-
-        // register associated PTX
-        
-        ModuleMap::iterator module = _modules.insert(
-	        std::make_pair(cubinContext.name(), ir::Module())).first;
-        module->second.lazyLoad(cubinContext.ptx(), cubinContext.name());
-        
-        report("Loading module (fatbin) - " << module->first);
-        reportE(REPORT_ALL_PTX, " with PTX\n" << cubinContext.ptx());
+	    // register associated PTX
+	    ModuleMap::iterator module = _modules.insert(
+		    std::make_pair(fatbin->second.name(), ir::Module())).first;
+	    module->second.lazyLoad(fatbin->second.ptx(), fatbin->second.name());
+	
+	    report("Loading module (fatbin) - " << module->first);
+	    reportE(REPORT_ALL_PTX, " with PTX\n" << fatbin->second.ptx());
 
         return (void **)handle;
     }

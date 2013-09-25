@@ -107,7 +107,7 @@ class CudaContext {
 
     private:
 
-        void findSymbol(const char *symbol, std::string & name, std::string & moduleName);
+        void findSymbol(const void *symbol, std::string & name, std::string & moduleName);
         cudaError_t locateTexture(
             const struct textureReference *texref, CUtexref & texHandle,
             CudaRuntimeContext::RegisteredTextureMap::iterator & texture);
@@ -121,7 +121,7 @@ class CudaContext {
 
         virtual cudaError_t cudaConfigureCall(dim3 gridDim, dim3 blockDim,
             size_t sharedMem, cudaStream_t stream);
-        virtual cudaError_t cudaLaunch(const char *entry);
+        virtual cudaError_t cudaLaunch(const void *entry);
         virtual cudaError_t cudaSetupArgument(const void *arg, size_t size,
             size_t offset);
         virtual cudaError_t cudaThreadSynchronize();
@@ -179,8 +179,8 @@ class CudaContext {
         virtual cudaError_t cudaGetSurfaceReference(
             const struct surfaceReference **surfRef, const char *symbol);
         virtual cudaError_t cudaGetSymbolAddress(void **devPtr,
-            const char *symbol);
-        virtual cudaError_t cudaGetSymbolSize(size_t *size, const char *symbol);
+            const void *symbol);
+        virtual cudaError_t cudaGetSymbolSize(size_t *size, const void *symbol);
         virtual cudaError_t cudaGetTextureAlignmentOffset(size_t *offset,
             const struct textureReference *texref);
         virtual cudaError_t cudaGetTextureReference(
@@ -275,10 +275,10 @@ class CudaContext {
         virtual cudaError_t cudaMemcpyFromArrayAsync(void *dst,
             const struct cudaArray *src, size_t wOffset, size_t hOffset,
             size_t count, enum cudaMemcpyKind kind, cudaStream_t stream);
-        virtual cudaError_t cudaMemcpyFromSymbol(void *dst, const char *symbol,
+        virtual cudaError_t cudaMemcpyFromSymbol(void *dst, const void *symbol,
             size_t count, size_t offset, enum cudaMemcpyKind kind);
         virtual cudaError_t cudaMemcpyFromSymbolAsync(void *dst,
-            const char *symbol, size_t count, size_t offset,
+            const void *symbol, size_t count, size_t offset,
             enum cudaMemcpyKind kind, cudaStream_t stream);
         virtual cudaError_t cudaMemcpyPeer(void *dst, int dstDevice,
             const void *src, int srcDevice, size_t count);
@@ -290,9 +290,9 @@ class CudaContext {
         virtual cudaError_t cudaMemcpyToArrayAsync(struct cudaArray *dst,
             size_t wOffset, size_t hOffset, const void *src, size_t count,
             enum cudaMemcpyKind kind, cudaStream_t stream);
-        virtual cudaError_t cudaMemcpyToSymbol(const char *symbol, const void *src,
+        virtual cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src,
             size_t count, size_t offset, enum cudaMemcpyKind kind);
-        virtual cudaError_t cudaMemcpyToSymbolAsync(const char *symbol,
+        virtual cudaError_t cudaMemcpyToSymbolAsync(const void *symbol,
             const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind,
             cudaStream_t stream);
         virtual cudaError_t cudaMemGetInfo(size_t *free, size_t *total);

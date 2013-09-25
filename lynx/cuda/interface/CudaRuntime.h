@@ -33,8 +33,8 @@ void __cudaUnregisterFatBinary(void **fatCubinHandle);
 
 extern "C"
 struct cudaChannelFormatDesc cudaCreateChannelDesc(int x, int y, int z,
-        int w, enum cudaChannelFormatKind f);
-        
+        int w, enum cudaChannelFormatKind f);   
+
 #ifdef __CPLUSPLUS
 }
 #endif

@@ -1,0 +1,13 @@
+{
+	lynx: "lynx",
+	instrument: {
+	    log: true,
+	    logKernelInfo: false,
+        activityFactor: false,
+        branchDivergence: false,
+        clockCycleCount: false,
+        memoryEfficiency: true,
+        barrierCount: false
+	}
+}
+

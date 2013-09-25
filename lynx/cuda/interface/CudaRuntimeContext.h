@@ -146,7 +146,7 @@ class CudaRuntimeContext : public boost::noncopyable {
                     std::string module;
             };
         
-            typedef std::vector< cuda::FatBinaryContext > FatBinaryVector;
+            typedef std::map< unsigned int, FatBinaryContext > FatBinaryMap;
             typedef std::map< std::string, ir::Module> ModuleMap;
             typedef std::map< void*, RegisteredKernel > RegisteredKernelMap;
             typedef std::map< void*, RegisteredGlobal > RegisteredGlobalMap;
@@ -154,7 +154,7 @@ class CudaRuntimeContext : public boost::noncopyable {
             
 
             //! fatbinaries
-		    FatBinaryVector _fatBinaries;
+		    FatBinaryMap _fatBinaries;
 
             //! Registered modules, kernels, textures, and variables
     	    ModuleMap _modules;

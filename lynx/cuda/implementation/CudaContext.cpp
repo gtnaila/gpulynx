@@ -92,8 +92,8 @@ namespace cuda {
             == cudaSuccess);
             
         report("initializing CUDA device ...");
-        _device = new CudaDevice(deviceId);    
-            
+        _device = new CudaDevice(deviceId);              
+
         report("initializing lynx ...");    
         lynx::initialize();
         report("getting instrumentors ...");
@@ -122,15 +122,7 @@ namespace cuda {
     void CudaContext::registerModule(ir::Module & module)
     {
         report("REGISTER-MODULE");
-        bool toggled = lynx::getInstrumentorSwitch();
-        if(!toggled && module.loaded()) return;
-        if(toggled)
-        {
-            report("RELOADING MODULE ...");
-            FatBinaryContext cubinContext = cudaRuntime()->_fatBinaries.front();
-            module.lazyLoad(cubinContext.ptx(), cubinContext.name());
-            lynx::setInstrumentorSwitch(false);
-	    }    
+        if(module.loaded()) return;    
     
         report("loading module now");
         module.loadNow();
@@ -185,6 +177,8 @@ namespace cuda {
     cudaError_t CudaContext::launchKernel(CUfunction kernelHandle, 
         KernelLaunchConfiguration launch) 
     {
+
+        report("launchKernel ...");
 
         size_t paramSize = 0;
         for (size_t i = 0; i < launch.args.size(); i++) {
@@ -252,19 +246,21 @@ namespace cuda {
     }
 
 
-    cudaError_t CudaContext::cudaLaunch(const char *entry) {
+    cudaError_t CudaContext::cudaLaunch(const void *entry) {
         boost::unique_lock<boost::mutex> lock(_mutex);
+
+        report("cudaLaunch ...");
 
         cudaError_t result = cudaErrorLaunchFailure;
 
         CudaRuntimeContext::RegisteredKernelMap::iterator kernel = 
-            _cudaRuntime->_kernels.find((void*)entry);
+            _cudaRuntime->_kernels.find((void *)entry);
         assert(kernel != _cudaRuntime->_kernels.end());
         std::string moduleName = kernel->second.module;
         std::string kernelName = kernel->second.kernel;
     
         report("module: " << moduleName << ", kernel: " << kernelName);
-
+       
         CudaRuntimeContext::ModuleMap::iterator module = 
             _cudaRuntime->_modules.find(moduleName);
         assert(module != _cudaRuntime->_modules.end());
@@ -697,7 +693,7 @@ namespace cuda {
         return ret;
     }
 
-    void CudaContext::findSymbol(const char *symbol, std::string & name, std::string & moduleName) 
+    void CudaContext::findSymbol(const void *symbol, std::string & name, std::string & moduleName) 
     {
         CudaRuntimeContext::RegisteredGlobalMap::iterator global = 
         cudaRuntime()->_globals.find((void*)symbol);
@@ -712,7 +708,7 @@ namespace cuda {
         }
         else
         {
-            name = symbol;
+            name = (char *)symbol;
             // register all modules -- this ensures that all global variables
             // added via instrumentation have been incorporated into the modules
             report("registering all modules ...");
@@ -723,7 +719,7 @@ namespace cuda {
 			{
                 report("searching module - " << module->second.path());
 				ir::Module::GlobalMap::const_iterator g = 
-					module->second.globals().find(symbol);
+					module->second.globals().find((char *)symbol);
 				if(g != module->second.globals().end())
 				{
 					moduleName = module->second.path();
@@ -735,7 +731,7 @@ namespace cuda {
     }
 
     cudaError_t CudaContext::cudaGetSymbolAddress(void **devPtr,
-            const char *symbol) {
+            const void *symbol) {
 
         report("cudaGetSymbolAddress - symbol: " << (void *)symbol);
 
@@ -772,7 +768,7 @@ namespace cuda {
         return setLastError(cudaSuccess);
     }
 
-    cudaError_t CudaContext::cudaGetSymbolSize(size_t *size, const char *symbol) {
+    cudaError_t CudaContext::cudaGetSymbolSize(size_t *size, const void *symbol) {
         
         if (!(size)) {
             return setLastError(cudaErrorInvalidValue);
@@ -1063,7 +1059,7 @@ namespace cuda {
     }
 
     cudaError_t CudaContext::cudaMemcpyFromSymbol(void *dst,
-            const char *symbol, size_t count, size_t offset,
+            const void *symbol, size_t count, size_t offset,
             enum cudaMemcpyKind kind) {
 
         uint8_t * symbolPtr;
@@ -1100,7 +1096,7 @@ namespace cuda {
     }
 
     cudaError_t CudaContext::cudaMemcpyFromSymbolAsync(void *dst,
-            const char *symbol, size_t count, size_t offset,
+            const void *symbol, size_t count, size_t offset,
             enum cudaMemcpyKind kind, cudaStream_t stream) {
 
         uint8_t * symbolPtr;
@@ -1162,7 +1158,7 @@ namespace cuda {
             kind, stream);
     }
 
-    cudaError_t CudaContext::cudaMemcpyToSymbol(const char *symbol,
+    cudaError_t CudaContext::cudaMemcpyToSymbol(const void *symbol,
             const void *src, size_t count, size_t offset,
             enum cudaMemcpyKind kind) {
         
@@ -1200,7 +1196,7 @@ namespace cuda {
         return cudaMemcpy(symbolPtr + offset, src, count, kind);
     }
 
-    cudaError_t CudaContext::cudaMemcpyToSymbolAsync(const char *symbol,
+    cudaError_t CudaContext::cudaMemcpyToSymbolAsync(const void *symbol,
             const void *src, size_t count, size_t offset,
             enum cudaMemcpyKind kind, cudaStream_t stream) {
 

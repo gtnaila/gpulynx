@@ -319,7 +319,7 @@ def Environment():
 		
 	# get CUDA paths
 	(cuda_exe_path, cuda_lib_path, cuda_inc_path)  = getCudaPaths()
-	env.AppendUnique(LIBPATH = [cuda_lib_path])
+	env.AppendUnique(LIBPATH = [cuda_lib_path, '/usr/lib/nvidia-304'])
 	env.AppendUnique(CPPPATH = [cuda_inc_path])
 
 	

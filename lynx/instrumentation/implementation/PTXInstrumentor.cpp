@@ -75,10 +75,10 @@ namespace instrumentation
         for(PassMap::iterator pass = passes.begin(); pass != passes.end(); ++pass)
         {
             if(pass->second != NULL)
-                manager.addPass( *(pass->second) ); 
+                manager.addPass( pass->second ); 
         }
 	    manager.runOnModule();
-        manager.destroyPasses();  
+        manager.releasePasses();  
     }
 
     void PTXInstrumentor::finalize() {

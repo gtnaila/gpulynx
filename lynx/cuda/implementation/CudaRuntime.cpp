@@ -515,13 +515,13 @@ cudaError_t cudaMemcpyFromArrayAsync(void *dst, const struct cudaArray *src,
         dst, src, wOffset, hOffset, count, kind, stream);
 }
 
-cudaError_t cudaMemcpyFromSymbol(void *dst, const char *symbol, size_t count,
+cudaError_t cudaMemcpyFromSymbol(void *dst, const void *symbol, size_t count,
         size_t offset, enum cudaMemcpyKind kind) {
     return CudaRuntimeContext::instance().context().cudaMemcpyFromSymbol(dst,
         symbol, count, offset, kind);
 }
 
-cudaError_t cudaMemcpyFromSymbolAsync(void *dst, const char *symbol, size_t
+cudaError_t cudaMemcpyFromSymbolAsync(void *dst, const void *symbol, size_t
         count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream) {
     return CudaRuntimeContext::instance().context().cudaMemcpyFromSymbolAsync(
         dst, symbol, count, offset, kind, stream);
@@ -552,13 +552,13 @@ cudaError_t cudaMemcpyToArrayAsync(struct cudaArray *dst, size_t wOffset,
         wOffset, hOffset, src, count, kind, stream);
 }
 
-cudaError_t cudaMemcpyToSymbol(const char *symbol, const void *src, size_t
+cudaError_t cudaMemcpyToSymbol(const void *symbol, const void *src, size_t
         count, size_t offset, enum cudaMemcpyKind kind) {
     return CudaRuntimeContext::instance().context().cudaMemcpyToSymbol(symbol,
         src, count, offset, kind);
 }
 
-cudaError_t cudaMemcpyToSymbolAsync(const char *symbol, const void *src,
+cudaError_t cudaMemcpyToSymbolAsync(const void *symbol, const void *src,
         size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t
         stream) {
     return CudaRuntimeContext::instance().context().cudaMemcpyToSymbolAsync(
@@ -604,7 +604,7 @@ cudaError_t cudaMemsetAsync(void *devPtr, int value, size_t count,
         value, count, stream);
 }
 
-cudaError_t cudaLaunch(const char *entry) {
+cudaError_t cudaLaunch(const void *entry) {
     return CudaRuntimeContext::instance().context().cudaLaunch(entry);
 }
 
