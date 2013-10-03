@@ -166,8 +166,8 @@ class CudaContext {
         virtual cudaError_t cudaFreeArray(struct cudaArray *array);
         virtual cudaError_t cudaFreeHost(void *ptr);
         virtual cudaError_t cudaFuncGetAttributes(struct cudaFuncAttributes *attr,
-            const char *func);
-        virtual cudaError_t cudaFuncSetCacheConfig(const char *func,
+            const void *func);
+        virtual cudaError_t cudaFuncSetCacheConfig(const void *func,
             enum cudaFuncCache cacheConfig);
         virtual cudaError_t cudaGetChannelDesc(struct cudaChannelFormatDesc *desc,
             const struct cudaArray *array);

@@ -71,8 +71,8 @@ public:
     static cudaError_t cudaFreeArray(struct cudaArray *array);
     static cudaError_t cudaFreeHost(void *ptr);
     static cudaError_t cudaFuncGetAttributes(struct cudaFuncAttributes *attr,
-        const char *func);
-    static cudaError_t cudaFuncSetCacheConfig(const char *func,
+        const void *func);
+    static cudaError_t cudaFuncSetCacheConfig(const void *func,
         enum cudaFuncCache cacheConfig);
     static struct cudaChannelFormatDesc cudaCreateChannelDesc(int x, int y, int z,
         int w, enum cudaChannelFormatKind f);

@@ -79,8 +79,8 @@ typedef cudaError_t (*cudaFree_t)(void *);
 typedef cudaError_t (*cudaFreeArray_t)(struct cudaArray *);
 typedef cudaError_t (*cudaFreeHost_t)(void *);
 typedef cudaError_t (*cudaFuncGetAttributes_t)(struct cudaFuncAttributes *attr,
-        const char *func);
-typedef cudaError_t (*cudaFuncSetCacheConfig_t)(const char *,
+        const void *func);
+typedef cudaError_t (*cudaFuncSetCacheConfig_t)(const void *,
     enum cudaFuncCache);
 
 typedef struct cudaChannelFormatDesc (*cudaCreateChannelDesc_t)(int x, int y, int z,
@@ -399,12 +399,12 @@ cudaError_t CudaRuntimeInterface::cudaFreeHost(void *ptr) {
 }
 
 cudaError_t CudaRuntimeInterface::cudaFuncGetAttributes(struct cudaFuncAttributes *attr,
-        const char *func) {
+        const void *func) {
     return ((cudaFuncGetAttributes_t) DYNLINK(cudaFuncGetAttributes))
     	(attr, func);           
 }        
 
-cudaError_t CudaRuntimeInterface::cudaFuncSetCacheConfig(const char *func,
+cudaError_t CudaRuntimeInterface::cudaFuncSetCacheConfig(const void *func,
         enum cudaFuncCache cacheConfig) {
     return ((cudaFuncSetCacheConfig_t) DYNLINK(cudaFuncSetCacheConfig))
     	(func, cacheConfig);

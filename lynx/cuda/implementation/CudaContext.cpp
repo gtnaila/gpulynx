@@ -657,11 +657,11 @@ namespace cuda {
     }
 
     cudaError_t CudaContext::cudaFuncGetAttributes(
-            struct cudaFuncAttributes *attr, const char *func) {
+            struct cudaFuncAttributes *attr, const void *func) {
         return CudaRuntimeInterface::cudaFuncGetAttributes(attr, func);
     }
 
-    cudaError_t CudaContext::cudaFuncSetCacheConfig(const char *func,
+    cudaError_t CudaContext::cudaFuncSetCacheConfig(const void *func,
             enum cudaFuncCache cacheConfig) {
        return CudaRuntimeInterface::cudaFuncSetCacheConfig(func, cacheConfig);
     }

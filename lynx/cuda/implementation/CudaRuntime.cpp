@@ -213,12 +213,12 @@ cudaError_t cudaFreeHost(void *ptr) {
 }
 
 cudaError_t cudaFuncGetAttributes(struct cudaFuncAttributes *attr, const
-        char *func) {
+        void *func) {
     return CudaRuntimeContext::instance().context().cudaFuncGetAttributes(
         attr, func);
 }
 
-cudaError_t cudaFuncSetCacheConfig(const char *func, enum cudaFuncCache
+cudaError_t cudaFuncSetCacheConfig(const void *func, enum cudaFuncCache
         cacheConfig) {
     return CudaRuntimeContext::instance().context().cudaFuncSetCacheConfig(
         func, cacheConfig);

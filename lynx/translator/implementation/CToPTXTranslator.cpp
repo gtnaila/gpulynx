@@ -20,7 +20,7 @@
 
 #define EMIT_COD    0
 
-#define SHARED_MEM_SIZE 512
+#define SHARED_MEM_SIZE 1024
 
 namespace translator
 {
