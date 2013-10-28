@@ -20,7 +20,7 @@ namespace analysis
 Analysis* AnalysisFactory::createAnalysis(const std::string& name,
         const StringVector& options)
 {
-        Analysis* analysis = nullptr;
+        Analysis* analysis = NULL;
 
         if(name == "ControlTreeAnalysis")
         {
@@ -47,7 +47,7 @@ Analysis* AnalysisFactory::createAnalysis(const std::string& name,
                 analysis = new DivergenceAnalysis;
         }
 
-        if(analysis != nullptr)
+        if(analysis != NULL)
         {
                 analysis->configure(options);
         }

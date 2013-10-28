@@ -928,7 +928,7 @@ namespace transforms
 	
     CToPTXInstrumentationPass::CToPTXInstrumentationPass(translator::CToPTXData
         translation)
-		: KernelPass({"DataflowGraphAnalysis"}, "CToPTXInstrumentationPass" ),
+		: KernelPass(Analysis::StringVector({"DataflowGraphAnalysis"}), "CToPTXInstrumentationPass" ),
         translation(translation)
 	{
 	    parameterMap = translation.parameterMap;
