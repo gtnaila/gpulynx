@@ -4,7 +4,6 @@
 	    log: true,
 	    logKernelInfo: false,
 	    logfile: profile,
-	    iterations: 1,
         activityFactor: false,
         branchDivergence: false,
         clockCycleCount: false,
