@@ -82,6 +82,10 @@ unsigned long basicBlockExecutedInstructionCount();
 
 unsigned long basicBlockPredicatedInstructionCount();
 
+unsigned long basicBlockGlobalMemoryInstructionCount();
+
+unsigned long basicBlockMemoryInstructionCount();
+
 unsigned long instructionId();
 
 unsigned long warpCount();

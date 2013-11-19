@@ -1634,7 +1634,9 @@ namespace translator
                     case instructionIdSymbol:
                     case instructionCountSymbol:
                     case getPredicateValueSymbol:
-                    case basicBlockPredInstCountSymbol:    
+                    case basicBlockPredInstCountSymbol: 
+                    case basicBlockGlobalMemInstCountSymbol:
+                    case basicBlockMemInstCountSymbol:   
                     {
                         generateStaticAttributes(inst, stmt, type, insn, call_name);
                     }

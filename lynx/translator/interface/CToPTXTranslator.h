@@ -69,23 +69,25 @@
 
 
 /* basic block constructs */
-#define BASIC_BLOCK_COUNT               "basicBlockCount"
-#define BASIC_BLOCK_ID                  "basicBlockId"
-#define BASIC_BLOCK_INST_COUNT          "basicBlockInstructionCount"
-#define BASIC_BLOCK_EXEC_INST_COUNT     "basicBlockExecutedInstructionCount"
-#define BASIC_BLOCK_PRED_INST_COUNT     "basicBlockPredicatedInstructionCount"
-#define INSTRUCTION_ID                  "instructionId"
-#define INSTRUCTION_COUNT               "instructionCount"
+#define BASIC_BLOCK_COUNT                       "basicBlockCount"
+#define BASIC_BLOCK_ID                          "basicBlockId"
+#define BASIC_BLOCK_INST_COUNT                  "basicBlockInstructionCount"
+#define BASIC_BLOCK_EXEC_INST_COUNT             "basicBlockExecutedInstructionCount"
+#define BASIC_BLOCK_PRED_INST_COUNT             "basicBlockPredicatedInstructionCount"
+#define BASIC_BLOCK_GLOBAL_MEM_INST_COUNT       "basicBlockGlobalMemoryInstructionCount"
+#define BASIC_BLOCK_MEM_INST_COUNT              "basicBlockMemoryInstructionCount"
+#define INSTRUCTION_ID                          "instructionId"
+#define INSTRUCTION_COUNT                       "instructionCount"
 
-#define COMPUTE_BASE_ADDRESS            "computeBaseAddress"
-#define GET_PREDICATE_VALUE             "getPredicateValue"
+#define COMPUTE_BASE_ADDRESS                    "computeBaseAddress"
+#define GET_PREDICATE_VALUE                     "getPredicateValue"
 
-#define EXIT                            "$exit"
-#define LOOP_BEGIN                      "$loopBegin"
-#define LOOP                            "$loop"
-#define LOOP_END                        "$loopEnd"
+#define EXIT                                    "$exit"
+#define LOOP_BEGIN                              "$loopBegin"
+#define LOOP                                    "$loop"
+#define LOOP_END                                "$loopEnd"
 
-#define TARGET                           "target"
+#define TARGET                                  "target"
 
 namespace translator {
 
@@ -171,6 +173,8 @@ namespace translator {
                 basicBlockInstCountSymbol,
                 basicBlockExecInstCountSymbol,
                 basicBlockPredInstCountSymbol,
+                basicBlockGlobalMemInstCountSymbol,
+                basicBlockMemInstCountSymbol,
                 instructionIdSymbol,
                 instructionCountSymbol,
                 warpCountSymbol,

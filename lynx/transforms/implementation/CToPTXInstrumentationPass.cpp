@@ -50,6 +50,8 @@ namespace transforms
         
             if(operand.identifier == BASIC_BLOCK_COUNT || 
                 operand.identifier == BASIC_BLOCK_INST_COUNT ||
+                operand.identifier == BASIC_BLOCK_GLOBAL_MEM_INST_COUNT ||
+                operand.identifier == BASIC_BLOCK_MEM_INST_COUNT ||
                 operand.identifier == BASIC_BLOCK_EXEC_INST_COUNT ||
                 operand.identifier == BASIC_BLOCK_ID ||
                 operand.identifier == INSTRUCTION_COUNT ||
@@ -68,6 +70,11 @@ namespace transforms
                 (toInsert.instruction.*(source_operands[i])).imm_uint = attributes.instructionId;
             else if( operand.identifier == INSTRUCTION_COUNT)
                 (toInsert.instruction.*(source_operands[i])).imm_uint = attributes.kernelInstructionCount;
+            else if(operand.identifier == BASIC_BLOCK_GLOBAL_MEM_INST_COUNT)
+                (toInsert.instruction.*(source_operands[i])).imm_uint = attributes.basicBlockGlobalMemoryInstructionCount;
+            else if(operand.identifier == BASIC_BLOCK_MEM_INST_COUNT)
+                (toInsert.instruction.*(source_operands[i])).imm_uint = attributes.basicBlockMemoryInstructionCount;
+
        } 
        
         if(statement.instruction.d.identifier == COMPUTE_BASE_ADDRESS)
@@ -300,6 +307,8 @@ namespace transforms
         StaticAttributes attributes;
         attributes.basicBlockId = 0;
         attributes.basicBlockInstructionCount = 0;
+        attributes.basicBlockMemoryInstructionCount = 0;
+        attributes.basicBlockGlobalMemoryInstructionCount = 0;
         attributes.basicBlockCount = dfg().size() - 2;
         
         analysis::DataflowGraph::iterator block = dfg().begin();
@@ -323,6 +332,14 @@ namespace transforms
                 if(instrumentationConditionsMet(*ptxInstruction, translationBlock)) 
                 {
                     attributes.basicBlockInstructionCount++;
+
+                    if(ptxInstruction->opcode == ir::PTXInstruction::Ld || ptxInstruction->opcode == ir::PTXInstruction::St)
+                    {
+                        if(ptxInstruction->addressSpace == ir::PTXInstruction::Global)
+                            attributes.basicBlockGlobalMemoryInstructionCount++;
+                        
+                        attributes.basicBlockMemoryInstructionCount++;
+                    }
                     
                     if(translationBlock.specifier.checkForPredication && 
                         (ptxInstruction->pg.condition == ir::PTXOperand::Pred || ptxInstruction->pg.condition == ir::PTXOperand::InvPred))

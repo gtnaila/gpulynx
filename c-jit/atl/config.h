@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define with the name of the host which will run the atom server */
-#define ATOM_SERVER_HOST "naila-pc.(none)"
+#define ATOM_SERVER_HOST "hetero.cc.gt.atl.ga.us"
 
 /* Define with the name of the domain which the atom server will service */
 #define ATOM_SERVICE_DOMAIN ""

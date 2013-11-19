@@ -73,6 +73,8 @@ namespace transforms
             unsigned int basicBlockId;
             unsigned int basicBlockInstructionCount;
             unsigned int basicBlockExecutedInstructionCount;
+            unsigned int basicBlockGlobalMemoryInstructionCount;
+            unsigned int basicBlockMemoryInstructionCount;
             unsigned int instructionId;
             unsigned int kernelInstructionCount;
             ir::PTXInstruction originalInstruction;
