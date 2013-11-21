@@ -8,6 +8,8 @@
 #define WARP_INSTRUMENTOR_H_INCLUDED
 
 #include <string>
+#include <set>
+#include <map>
 
 #include <lynx/instrumentation/interface/PTXInstrumentor.h>
 
@@ -20,6 +22,8 @@ namespace instrumentation
 	class WarpInstrumentor : public PTXInstrumentor
 	{
 		public:
+
+            typedef std::map<std::string, std::set<std::string>> InformationFlowMap;
             
             enum InstrumentationType {
 		        memoryEfficiency,
@@ -37,6 +41,8 @@ namespace instrumentation
             unsigned int warpCount;
             
             unsigned int entries;
+
+            InformationFlowMap flowMap;
         	
 		public:
 			/*! \brief The default constructor */

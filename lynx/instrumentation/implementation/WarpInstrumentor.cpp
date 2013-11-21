@@ -42,8 +42,92 @@ namespace instrumentation
     }
 
     void WarpInstrumentor::analyze(ir::Module &module) {
-        //no static analysis necessary
+
+       for (ir::Module::KernelMap::const_iterator kernel = module.kernels().begin(); 
+	        kernel != module.kernels().end(); ++kernel) 
+       {
+	        
+            //std::cout << "kernel: " << kernel->first << std::endl;        
+
+            ir::ControlFlowGraph::BlockPointerVector sequence =
+                    kernel->second->cfg()->reverse_topological_sequence();
+            for(ir::ControlFlowGraph::BlockPointerVector::iterator block = sequence.begin();
+                            block != sequence.end(); ++block)
+            {
+                if(!(*block)->instructions.size()) continue;
+
+                for(ir::ControlFlowGraph::BasicBlock::InstructionList::reverse_iterator 
+                    instruction = (*block)->instructions.rbegin(); instruction != 
+                    (*block)->instructions.rend(); ++instruction)
+                {
+                    ir::PTXInstruction *ptxInstruction = ((ir::PTXInstruction *)*instruction);
+                    //std::cout << ptxInstruction->toString() << std::endl;
+                    if(ptxInstruction->addressSpace == ir::PTXInstruction::Global 
+                        && ptxInstruction->opcode == ir::PTXInstruction::Ld)
+                    {
+                        
+                        std::set<std::string> registerSet;
+                        registerSet.insert(ptxInstruction->a.toString());
+                        flowMap.insert(std::make_pair(ptxInstruction->toString(), registerSet));
+                    }
+                    else if(ptxInstruction->addressSpace == ir::PTXInstruction::Global 
+                        && ptxInstruction->opcode == ir::PTXInstruction::St)
+                    {
+                        std::set<std::string> registerSet;
+                        registerSet.insert(ptxInstruction->d.toString());
+                        flowMap.insert(std::make_pair(ptxInstruction->toString(), registerSet));
+                    }
+                    else
+                    {
+                        //iterate through registerSets in flowMap
+                        for(InformationFlowMap::iterator globalMemOp = flowMap.begin();
+                            globalMemOp != flowMap.end(); ++globalMemOp)
+                        {
+                            std::set<std::string>::iterator toErase = globalMemOp->second.end();
+                            for(std::set<std::string>::iterator reg = globalMemOp->second.begin();
+                                reg != globalMemOp->second.end(); ++reg)
+                            {  
+                                if(ptxInstruction->d.toString().compare(*reg) == 0) {
+                                    toErase = reg;
+        
+                                    if(ptxInstruction->addressSpace == ir::PTXInstruction::Param 
+                                        && ptxInstruction->opcode == ir::PTXInstruction::Ld) {
+                                        globalMemOp->second.insert(ptxInstruction->a.toString());
+                                    }
+                                    else {     
+
+                                        if(ptxInstruction->a.addressMode == ir::PTXOperand::Register)
+                                            globalMemOp->second.insert(ptxInstruction->a.toString());
+                                        if(ptxInstruction->b.addressMode == ir::PTXOperand::Register)
+                                            globalMemOp->second.insert(ptxInstruction->b.toString());
+                                        if(ptxInstruction->c.addressMode == ir::PTXOperand::Register) 
+                                            globalMemOp->second.insert(ptxInstruction->a.toString()); 
+                                    }                                                                      
+                                }
+                            }
+                            
+                            if(toErase != globalMemOp->second.end())
+                                globalMemOp->second.erase(toErase);
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        /*
+        for(InformationFlowMap::iterator globalMemOp = flowMap.begin();
+            globalMemOp != flowMap.end(); ++globalMemOp)
+        {
+            std::cout << globalMemOp->first << ":" << std::endl;
+            for(std::set<std::string>::iterator reg = globalMemOp->second.begin();
+                reg != globalMemOp->second.end(); ++reg)
+                std::cout << *reg << "\t";
+            std::cout << std::endl;
+        }
+        */
     }
+
 
     void WarpInstrumentor::initialize() {
         

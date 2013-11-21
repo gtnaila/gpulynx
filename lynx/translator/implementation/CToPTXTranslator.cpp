@@ -2060,6 +2060,8 @@ namespace translator
                                         unsigned long basicBlockInstructionCount();\
                                         unsigned long basicBlockExecutedInstructionCount();\
                                         unsigned long basicBlockPredicatedInstructionCount();\
+                                        unsigned long basicBlockGlobalMemoryInstructionCount();\
+                                        unsigned long basicBlockMemoryInstructionCount();\
                                         unsigned long instructionId();\
                                         unsigned long instructionCount();\
                                         unsigned long warpCount();\
@@ -2103,6 +2105,8 @@ namespace translator
             {(char *)"basicBlockInstructionCount", (void*)(unsigned long)(*basicBlockInstructionCount)},
             {(char *)"basicBlockExecutedInstructionCount", (void*)(unsigned long)(*basicBlockExecutedInstructionCount)},
             {(char *)"basicBlockPredicatedInstructionCount", (void*)(unsigned long)(*basicBlockPredicatedInstructionCount)},
+            {(char *)"basicBlockGlobalMemoryInstructionCount", (void*)(unsigned long)(*basicBlockGlobalMemoryInstructionCount)},
+            {(char *)"basicBlockMemoryInstructionCount", (void*)(unsigned long)(*basicBlockMemoryInstructionCount)},
             {(char *)"instructionId", (void*)(unsigned long)(*instructionId)},
             {(char *)"instructionCount", (void*)(unsigned long)(*instructionCount)},
             {(char *)"warpCount", (void*)(unsigned long)(*warpCount)},
@@ -2180,6 +2184,8 @@ namespace translator
         functionCalls["basicBlockInstructionCount"] = basicBlockInstCountSymbol;
         functionCalls["basicBlockExecutedInstructionCount"] = basicBlockExecInstCountSymbol;
         functionCalls["basicBlockPredicatedInstructionCount"] = basicBlockPredInstCountSymbol;
+        functionCalls["basicBlockGlobalMemoryInstructionCount"] = basicBlockGlobalMemInstCountSymbol;
+        functionCalls["basicBlockMemoryInstructionCount"] = basicBlockMemInstCountSymbol;
         functionCalls["instructionId"] = instructionIdSymbol;
         functionCalls["instructionCount"] = instructionCountSymbol;
         functionCalls["warpCount"] = warpCountSymbol;
